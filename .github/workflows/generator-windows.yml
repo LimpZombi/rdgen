@@ -139,7 +139,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "5% complete"}'
 
       - name: Checkout source code
@@ -282,7 +282,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "10% complete"}'
 
       - name: Install flutter
@@ -320,7 +320,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "15% complete"}'
 
       - uses: Swatinem/rust-cache@v2
@@ -333,7 +333,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "20% complete"}'
 
       - name: Setup vcpkg with Github Actions binary cache
@@ -444,7 +444,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "25% complete"}'
 
       - name: replace flutter icons
@@ -463,7 +463,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "50% complete, this step takes about 5 minutes, be patient."}'
 
       - name: Build rustdesk
@@ -548,7 +548,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "70% complete, this step takes about 5 minutes, be patient."}'
       
       - name: zip dlls
@@ -620,7 +620,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "85% complete"}'
 
       - name: zip exe and msi
@@ -664,8 +664,8 @@ jobs:
         if: ${{ fromJson(inputs.extras).rdgen == 'true' }}
         shell: bash
         run: |
-          curl -i -X POST -H "Content-Type: multipart/form-data" -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -F "file=@./SignOutput/${{ inputs.filename }}.exe" -F "uuid=${{ inputs.uuid }}" ${{ secrets.GENURL }}/save_custom_client
-          curl -i -X POST -H "Content-Type: multipart/form-data" -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -F "file=@./SignOutput/${{ inputs.filename }}.msi" -F "uuid=${{ inputs.uuid }}" ${{ secrets.GENURL }}/save_custom_client || true
+          curl -i -X POST -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -H "X-Rdgen-Token: ${{ secrets.RDGEN_API_TOKEN }}" -F "file=@./SignOutput/${{ inputs.filename }}.exe" -F "uuid=${{ inputs.uuid }}" ${{ secrets.GENURL }}/save_custom_client
+          curl -i -X POST -H "Authorization: Bearer ${{ fromJson(inputs.extras).token }}" -H "X-Rdgen-Token: ${{ secrets.RDGEN_API_TOKEN }}" -F "file=@./SignOutput/${{ inputs.filename }}.msi" -F "uuid=${{ inputs.uuid }}" ${{ secrets.GENURL }}/save_custom_client || true
 
       - name: send file to api server
         if: ${{ fromJson(inputs.extras).rdgen == 'false' }}
@@ -679,7 +679,7 @@ jobs:
         with:
           url: ${{ env.STATUS_URL }}
           method: 'POST'
-          customHeaders: '{"Content-Type": "application/json"}'
+          customHeaders: '{"Content-Type": "application/json", "X-Rdgen-Token": "${{ env.RDGEN_API_TOKEN }}"}'
           data: '{"uuid": "${{ inputs.uuid }}", "status": "Success"}'
 
       - name: failed
